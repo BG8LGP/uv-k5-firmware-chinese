@@ -85,7 +85,7 @@ void UI_PrintString(const char *pString, uint8_t Start, uint8_t End, uint8_t Lin
 		const unsigned int ofs = (unsigned int)Start + ((i - ofs_fix) * Width);
 		if (pString[i] > ' ' && pString[i] < 0x7F)
 		{
-			const unsigned int index = pString[i] - ' ' - 1;
+			const unsigned int index = pString[i] - ' ';
 			memmove(gFrameBuffer[Line + 0] + ofs, &gFontBig[index][0], 8);
 			memmove(gFrameBuffer[Line + 1] + ofs, &gFontBig[index][8], 8);
 			ofs_fix = 0;
