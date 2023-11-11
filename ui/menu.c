@@ -146,7 +146,7 @@ static const char gSubMenu_PTT_ID[4][5] = {
 	"BOTH",
 };
 
-static const char gSubMenu_PONMSG[3][5] = {
+static const char gSubMenu_PONMSG[3][6] = {
 	"全屏",
 	"信息",
 	"电压",
