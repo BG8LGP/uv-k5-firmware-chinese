@@ -1,3 +1,5 @@
+# 开源原生固件中文版
+
 # Open reimplementation of the Quan Sheng UV K5 v2.1.27 firmware
 
 This repository is a preservation project of the UV K5 v2.1.27 firmware.
