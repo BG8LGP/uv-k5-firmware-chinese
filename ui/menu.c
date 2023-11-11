@@ -30,27 +30,27 @@
 
 static const char MenuList[][16] = {
 	// 0x00
-	"静噪",    "步频",    "TXP",    "R_DCS",
-	"R_CTCS", "T_DCS",   "T_CTCS", "SFT-D",
+	"静噪",    "步频",    "功率",    "数字亚音",
+	"模拟亚音收", "数字亚音发",   "模拟亚音发", "频差方向",
 	// 0x08
-	"频差", "带宽",     "SCR",    "BCL",
+	"频差", "带宽",     "干扰频率",    "忙锁",
 	"储存信道", "节电",    "声控",    "背光",
 	// 0x10
-	"TDR",    "WX",      "BEEP",   "TOT",
-	"语音",  "SC-REV",  "MDF",    "键锁",
+	"TDR",    "双守",      "按键音",   "发射超时",
+	"语音",  "扫描动作",  "主屏显示",    "键锁",
 	// 0x18
-	"S-ADD1", "S-ADD2",  "STE",    "RP-STE",
-	"MIC",    "1-CALL",  "S-LIST", "SLIST1",
+	"添加到列1", "添加到列2",  "STE",    "RP-STE",
+	"MIC",    "1-CALL",  "扫描列1", "扫描列2",
 	// 0x20
 	"SLIST2",
 #if defined(ENABLE_ALARM)
-	          "AL-MOD",
+	          "警报模式",
 #endif
-		             "ANI-ID", "UPCODE",
+		             "PTT-ID", "UPCODE",
 	"DWCODE", "D-ST",    "D-RSP",  "D-HOLD",
 	// 0x28
 	"D-PRE",  "PTT-ID",  "D-DCD",  "D-LIST",
-	"PONMSG", "ROGER",   "VOL",    "AM",
+	"PONMSG", "ROGER",   "电池信息",    "AM",
 	// 0x30
 #if defined(ENABLE_NOAA)
 	"NOAA_S",
@@ -101,10 +101,10 @@ static const char gSubMenu_SAVE[5][4] = {
 	"1:4",
 };
 
-static const char gSubMenu_CHAN[3][7] = {
+static const char gSubMenu_CHAN[3][9] = {
 	"关",
-	"CHAN_A",
-	"CHAN_B",
+	"主信道",
+	"副信道",
 };
 
 static const char gSubMenu_VOICE[3][9] = {
@@ -136,7 +136,7 @@ static const char gSubMenu_D_RSP[4][9] = {
 	"无",
 	"响铃",
 	"回答",
-	"全开"
+	"全开",
 };
 
 static const char gSubMenu_PTT_ID[4][5] = {
@@ -147,9 +147,9 @@ static const char gSubMenu_PTT_ID[4][5] = {
 };
 
 static const char gSubMenu_PONMSG[3][5] = {
-	"FULL",
-	"MSG",
-	"VOL",
+	"全屏",
+	"信息",
+	"电压",
 };
 
 static const char gSubMenu_ROGER[3][6] = {
@@ -193,14 +193,14 @@ void UI_DisplayMenu(void)
 			}
 		}
 	}
-	for (i = 0; i < 48; i++) {
-		gFrameBuffer[2][i] ^= 0xFF;
-		gFrameBuffer[3][i] ^= 0xFF;
-	}
-	for (i = 0; i < 7; i++) {
-		gFrameBuffer[i][48] = 0xFF;
-		gFrameBuffer[i][49] = 0xFF;
-	}
+//	for (i = 0; i < 48; i++) {
+//		gFrameBuffer[2][i] ^= 0xFF;
+//		gFrameBuffer[3][i] ^= 0xFF;
+//	}
+//	for (i = 0; i < 7; i++) {
+//		gFrameBuffer[i][48] = 0xFF;
+//		gFrameBuffer[i][49] = 0xFF;
+//	}
 	NUMBER_ToDigits(gMenuCursor + 1, String);
 	UI_DisplaySmallDigits(2, String + 6, 33, 6);
 	if (gIsInSubMenu) {
