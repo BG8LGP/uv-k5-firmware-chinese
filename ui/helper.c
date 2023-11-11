@@ -86,8 +86,8 @@ void UI_PrintString(const char *pString, uint8_t Start, uint8_t End, uint8_t Lin
 		if (pString[i] > ' ' && pString[i] < 127)
 		{
 			const unsigned int index = pString[i] - ' ' - 1;
-			memmove(gFrameBuffer[Line + 0] + ofs, &gFontBig[index][0], 7);
-			memmove(gFrameBuffer[Line + 1] + ofs, &gFontBig[index][7], 7);
+			memmove(gFrameBuffer[Line + 0] + ofs, &gFontBig[index][0], 8);
+			memmove(gFrameBuffer[Line + 1] + ofs, &gFontBig[index][8], 8);
 			ofs_fix = 0;
 		}
 		else
@@ -96,8 +96,8 @@ void UI_PrintString(const char *pString, uint8_t Start, uint8_t End, uint8_t Lin
 			for (j = 0; j< strlen(CNList)/3; j++)
 				if (pString[i]==CNList[3*j] && pString[i+1]==CNList[3*j+1] && pString[i+2]==CNList[3*j+2])
 				{
-					memmove(gFrameBuffer[Line + 0] + ofs, &CNFont14[j][0], 14);
-					memmove(gFrameBuffer[Line + 1] + ofs, &CNFont14[j][14], 14);
+					memmove(gFrameBuffer[Line + 0] + ofs, &CNFont14[j][0], 16);
+					memmove(gFrameBuffer[Line + 1] + ofs, &CNFont14[j][16], 16);
 					i+=2;
 					ofs_fix++;
 					break;
