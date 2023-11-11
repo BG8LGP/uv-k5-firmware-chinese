@@ -72,17 +72,36 @@ void UI_GenerateChannelStringEx(char *pString, bool bShowPrefix, uint8_t Channel
 
 void UI_PrintString(const char *pString, uint8_t Start, uint8_t End, uint8_t Line, uint8_t Width, bool bCentered)
 {
-	uint32_t i, Length;
+	size_t i, j;
+	size_t Length = strlen(pString);
+	size_t ofs_fix = 0;
 
-	Length = strlen(pString);
-	if (bCentered) {
+	if (bCentered)
 		Start += (((End - Start) - (Length * Width)) + 1) / 2;
-	}
-	for (i = 0; i < Length; i++) {
-		if (pString[i] >= ' ' && pString[i] < 0x7F) {
-			uint8_t Index = pString[i] - ' ';
-			memcpy(gFrameBuffer[Line + 0] + (i * Width) + Start, &gFontBig[Index][0], 8);
-			memcpy(gFrameBuffer[Line + 1] + (i * Width) + Start, &gFontBig[Index][8], 8);
+	// init
+
+	for (i = 0; i < Length; i++)
+	{
+		const unsigned int ofs = (unsigned int)Start + ((i - ofs_fix) * Width);
+		if (pString[i] > ' ' && pString[i] < 127)
+		{
+			const unsigned int index = pString[i] - ' ' - 1;
+			memmove(gFrameBuffer[Line + 0] + ofs, &gFontBig[index][0], 7);
+			memmove(gFrameBuffer[Line + 1] + ofs, &gFontBig[index][7], 7);
+			ofs_fix = 0;
+		}
+		else
+		if (pString[i] > 127)
+		{
+			for (j = 0; j< strlen(CNList)/3; j++)
+				if (pString[i]==CNList[3*j] && pString[i+1]==CNList[3*j+1] && pString[i+2]==CNList[3*j+2])
+				{
+					memmove(gFrameBuffer[Line + 0] + ofs, &CNFont14[j][0], 14);
+					memmove(gFrameBuffer[Line + 1] + ofs, &CNFont14[j][14], 14);
+					i+=2;
+					ofs_fix++;
+					break;
+				}
 		}
 	}
 }

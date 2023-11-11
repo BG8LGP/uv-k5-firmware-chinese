@@ -40,8 +40,8 @@ void UI_DisplayMain(void)
 
 	memset(gFrameBuffer, 0, sizeof(gFrameBuffer));
 	if (gEeprom.KEY_LOCK && gKeypadLocked) {
-		UI_PrintString("Long Press #", 0, 127, 1, 8, true);
-		UI_PrintString("To Unlock", 0, 127, 3, 8, true);
+		UI_PrintString("长按 #键", 0, 127, 1, 8, true);
+		UI_PrintString("以解锁", 0, 127, 3, 8, true);
 		ST7565_BlitFullScreen();
 		return;
 	}
@@ -216,7 +216,7 @@ void UI_DisplayMain(void)
 				strcpy(String, "BAT LOW");
 				break;
 			case 3:
-				strcpy(String, "DISABLE");
+				strcpy(String, "禁止发射");
 				break;
 			case 4:
 				strcpy(String, "TIMEOUT");

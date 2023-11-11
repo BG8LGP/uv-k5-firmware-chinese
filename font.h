@@ -19,6 +19,8 @@
 
 #include <stdint.h>
 
+extern const char *CNList;
+extern const uint8_t CNFont14[][32];
 extern const uint8_t gFontBig[95][16];
 extern const uint8_t gFontBigDigits[11][26];
 extern const uint8_t gFontSmallDigits[11][7];

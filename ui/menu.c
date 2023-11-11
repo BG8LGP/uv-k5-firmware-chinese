@@ -28,16 +28,16 @@
 #include "ui/menu.h"
 #include "ui/ui.h"
 
-static const char MenuList[][7] = {
+static const char MenuList[][16] = {
 	// 0x00
-	"SQL",    "STEP",    "TXP",    "R_DCS",
+	"静噪",    "步频",    "TXP",    "R_DCS",
 	"R_CTCS", "T_DCS",   "T_CTCS", "SFT-D",
 	// 0x08
-	"OFFSET", "W/N",     "SCR",    "BCL",
-	"MEM-CH", "SAVE",    "VOX",    "ABR",
+	"频差", "带宽",     "SCR",    "BCL",
+	"储存信道", "节电",    "声控",    "背光",
 	// 0x10
 	"TDR",    "WX",      "BEEP",   "TOT",
-	"VOICE",  "SC-REV",  "MDF",    "AUTOLK",
+	"语音",  "SC-REV",  "MDF",    "键锁",
 	// 0x18
 	"S-ADD1", "S-ADD2",  "STE",    "RP-STE",
 	"MIC",    "1-CALL",  "S-LIST", "SLIST1",
@@ -72,29 +72,29 @@ static const uint16_t gSubMenu_Step[] = {
 };
 
 static const char gSubMenu_TXP[3][5] = {
-	"LOW",
-	"MID",
-	"HIGH",
+	"低",
+	"中",
+	"高"
 };
 
 static const char gSubMenu_SFT_D[3][4] = {
-	"OFF",
+	"关",
 	"+",
 	"-",
 };
 
-static const char gSubMenu_W_N[2][7] = {
-	"WIDE",
-	"NARROW",
+static const char gSubMenu_W_N[2][9] = {
+	"宽带",
+	"窄带"
 };
 
 static const char gSubMenu_OFF_ON[2][4] = {
-	"OFF",
-	"ON",
+	"关",
+	"开",
 };
 
 static const char gSubMenu_SAVE[5][4] = {
-	"OFF",
+	"关",
 	"1:1",
 	"1:2",
 	"1:3",
@@ -102,14 +102,14 @@ static const char gSubMenu_SAVE[5][4] = {
 };
 
 static const char gSubMenu_CHAN[3][7] = {
-	"OFF",
+	"关",
 	"CHAN_A",
 	"CHAN_B",
 };
 
-static const char gSubMenu_VOICE[3][4] = {
+static const char gSubMenu_VOICE[3][9] = {
 	"OFF",
-	"CHI",
+	"中文",
 	"ENG",
 };
 
@@ -119,10 +119,10 @@ static const char gSubMenu_SC_REV[3][3] = {
 	"SE",
 };
 
-static const char gSubMenu_MDF[3][5] = {
-	"FREQ",
-	"CHAN",
-	"NAME",
+static const char gSubMenu_MDF[3][9] = {
+	"频率",
+	"信道",
+	"名称",
 };
 
 #if defined(ENABLE_ALARM)
@@ -132,15 +132,15 @@ static const char gSubMenu_AL_MOD[2][5] = {
 };
 #endif
 
-static const char gSubMenu_D_RSP[4][6] = {
-	"NULL",
-	"RING",
-	"REPLY",
-	"BOTH",
+static const char gSubMenu_D_RSP[4][9] = {
+	"无",
+	"响铃",
+	"回答",
+	"全开"
 };
 
 static const char gSubMenu_PTT_ID[4][5] = {
-	"OFF",
+	"关",
 	"BOT",
 	"EOT",
 	"BOTH",
