@@ -193,10 +193,10 @@ void UI_DisplayMenu(void)
 			}
 		}
 	}
-//	for (i = 0; i < 48; i++) {
-//		gFrameBuffer[2][i] ^= 0xFF;
-//		gFrameBuffer[3][i] ^= 0xFF;
-//	}
+	for (i = 0; i < 48; i++) {
+		gFrameBuffer[2][i] ^= 0xFF;
+		gFrameBuffer[3][i] ^= 0xFF;
+	}
 //	for (i = 0; i < 7; i++) {
 //		gFrameBuffer[i][48] = 0xFF;
 //		gFrameBuffer[i][49] = 0xFF;
