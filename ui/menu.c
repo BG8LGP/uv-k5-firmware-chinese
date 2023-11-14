@@ -186,18 +186,25 @@ void UI_DisplayMenu(void)
 
 	memset(gFrameBuffer, 0, sizeof(gFrameBuffer));
 
-
-	UI_PrintString(MenuList[gMenuCursor], 0, 127,  0, 11, true);
-	for (i = 4; i < 123; i++) {
-		gFrameBuffer[1][i] |= 0b10000000; //ãîðèçîíòàëüíàÿ ëèíèÿ
+	for (i = 0; i < 3; i++) {
+		if (gMenuCursor || i) {
+			if ((gMenuListCount - 1) != gMenuCursor || (i != 2)) {
+				UI_PrintString(MenuList[gMenuCursor + i - 1], 0, 127, i * 2, 8, false);
+			}
+		}
 	}
+	for (i = 0; i < 48; i++) {
+		gFrameBuffer[2][i] ^= 0xFF;
+		gFrameBuffer[3][i] ^= 0xFF;
+	}
+//	for (i = 0; i < 7; i++) {
+//		gFrameBuffer[i][48] = 0xFF;
+//		gFrameBuffer[i][49] = 0xFF;
+//	}
 	NUMBER_ToDigits(gMenuCursor + 1, String);
-	UI_DisplaySmallDigits(2, String + 6, 4, 6);
+	UI_DisplaySmallDigits(2, String + 6, 33, 6);
 	if (gIsInSubMenu) {
-		memcpy(gFrameBuffer[3], BITMAP_MenuIndicator, sizeof(BITMAP_MenuIndicator));
-	}
-	else  {
-		memcpy(gFrameBuffer[1], BITMAP_MenuIndicator, sizeof(BITMAP_MenuIndicator));		
+		memcpy(gFrameBuffer[0] + 50, BITMAP_CurrentIndicator, sizeof(BITMAP_CurrentIndicator));
 	}
 
 	memset(String, 0, sizeof(String));
@@ -209,7 +216,7 @@ void UI_DisplayMenu(void)
 		break;
 
 	case MENU_STEP:
-		sprintf(String, "%d.%02dKHz", gSubMenu_Step[gSubMenuSelection] / 100, gSubMenu_Step[gSubMenuSelection] % 100);
+		sprintf(String, "%.2fKHz", gSubMenu_Step[gSubMenuSelection] * 0.01);
 		break;
 
 	case MENU_TXP:
@@ -219,7 +226,7 @@ void UI_DisplayMenu(void)
 	case MENU_R_DCS:
 	case MENU_T_DCS:
 		if (gSubMenuSelection == 0) {
-			strcpy(String, "Off");
+			strcpy(String, "OFF");
 		} else if (gSubMenuSelection < 105) {
 			sprintf(String, "D%03oN", DCS_Options[gSubMenuSelection - 1]);
 		} else {
@@ -230,9 +237,9 @@ void UI_DisplayMenu(void)
 	case MENU_R_CTCS:
 	case MENU_T_CTCS:
 		if (gSubMenuSelection == 0) {
-			strcpy(String, "Off");
+			strcpy(String, "OFF");
 		} else {
-			sprintf(String, "%d.%dHz", CTCSS_Options[gSubMenuSelection - 1] / 10, CTCSS_Options[gSubMenuSelection - 1] % 10);
+			sprintf(String, "%.1fHz", CTCSS_Options[gSubMenuSelection - 1] * 0.1);
 		}
 		break;
 
@@ -242,7 +249,7 @@ void UI_DisplayMenu(void)
 
 	case MENU_OFFSET:
 		if (!gIsInSubMenu || gInputBoxIndex == 0) {
-			sprintf(String, "%d.%05d", gSubMenuSelection / 100000, gSubMenuSelection % 100000);
+			sprintf(String, "%.5f", gSubMenuSelection * 1e-05);
 			break;
 		}
 		for (i = 0; i < 3; i++) {
@@ -275,7 +282,7 @@ void UI_DisplayMenu(void)
 	case MENU_VOX:
 	case MENU_ABR:
 		if (gSubMenuSelection == 0) {
-			strcpy(String, "Off");
+			strcpy(String, "OFF");
 		} else {
 			sprintf(String, "%d", gSubMenuSelection);
 		}
@@ -290,16 +297,17 @@ void UI_DisplayMenu(void)
 	case MENU_D_ST:
 	case MENU_D_DCD:
 	case MENU_AM:
-	case MENU_ALL_TX:
+#if defined(ENABLE_NOAA)
+	case MENU_NOAA_S:
+#endif
+	case MENU_350TX:
 	case MENU_200TX:
 	case MENU_500TX:
 	case MENU_350EN:
 	case MENU_SCREN:
 		strcpy(String, gSubMenu_OFF_ON[gSubMenuSelection]);
 		break;
-    case MENU_ABOUT:
-		strcpy(String, gSubMenu_ABOUT);
-		break; 
+
 	case MENU_MEM_CH:
 	case MENU_1_CALL:
 	case MENU_DEL_CH:
@@ -321,10 +329,14 @@ void UI_DisplayMenu(void)
 
 	case MENU_TOT:
 		if (gSubMenuSelection == 0) {
-			strcpy(String, "Off");
+			strcpy(String, "OFF");
 		} else {
 			sprintf(String, "%dmin", gSubMenuSelection);
 		}
+		break;
+
+	case MENU_VOICE:
+		strcpy(String, gSubMenu_VOICE[gSubMenuSelection]);
 		break;
 
 	case MENU_SC_REV:
@@ -337,19 +349,21 @@ void UI_DisplayMenu(void)
 
 	case MENU_RP_STE:
 		if (gSubMenuSelection == 0) {
-			strcpy(String, "Off");
+			strcpy(String, "OFF");
 		} else {
 			sprintf(String, "%d*100ms", gSubMenuSelection);
 		}
 		break;
 
 	case MENU_S_LIST:
-		sprintf(String, "List %d", gSubMenuSelection);
+		sprintf(String, "LIST%d", gSubMenuSelection);
 		break;
 
-	case MENU_LOCK_TYPE:
-		sprintf(String, gSubMenu_LOCK_TYPE[gSubMenuSelection]);
+#if defined(ENABLE_ALARM)
+	case MENU_AL_MOD:
+		sprintf(String, gSubMenu_AL_MOD[gSubMenuSelection]);
 		break;
+#endif
 
 	case MENU_ANI_ID:
 		strcpy(String, gEeprom.ANI_DTMF_ID);
@@ -389,20 +403,16 @@ void UI_DisplayMenu(void)
 		}
 		break;
 
+	case MENU_PONMSG:
+		strcpy(String, gSubMenu_PONMSG[gSubMenuSelection]);
+		break;
+
 	case MENU_ROGER:
 		strcpy(String, gSubMenu_ROGER[gSubMenuSelection]);
 		break;
 
 	case MENU_VOL:
-    case MENU_CALIBRATION:
-        sprintf(String, "%d.%02dV", gBatteryVoltageAverage / 100, gBatteryVoltageAverage % 100);
-		break;
-		
-	case MENU_F1_SHORT:
-    case MENU_F1_LONG:
-	case MENU_F2_SHORT:
-	case MENU_F2_LONG:
-		strcpy(String, gSubMenu_FUNCTIONS[gSubMenuSelection]);
+		sprintf(String, "%.2fV", gBatteryVoltageAverage * 0.01);
 		break;
 
 	case MENU_RESET:
@@ -419,9 +429,9 @@ void UI_DisplayMenu(void)
 	if (gMenuCursor == MENU_OFFSET) {
 		UI_PrintString("MHz", 0, 127, 4, 10, true);
 	}
-	if (gMenuCursor == MENU_ABOUT) {
-		UI_PrintString(Version, 0, 127, 4, 10, true);
-	}
+	//if (gMenuCursor == MENU_ABOUT) {
+	//	UI_PrintString(Version, 0, 127, 4, 10, true);
+	//}
 	if ((gMenuCursor == MENU_RESET || gMenuCursor == MENU_MEM_CH || gMenuCursor == MENU_DEL_CH) && gAskForConfirmation) {
 		if (gAskForConfirmation == 1) {
 			strcpy(String, "SURE?");
@@ -485,7 +495,5 @@ void UI_DisplayMenu(void)
 		}
 	}
 
-	ST7565_BlitFullScreen();
-}
 	ST7565_BlitFullScreen();
 }
